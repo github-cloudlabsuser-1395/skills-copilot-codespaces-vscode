@@ -1,49 +1,87 @@
-class Calculator {
-    constructor() {
-        this.currentValue = 0;
-    }
+const Calculator = require('./test.js');
 
-    add(value) {
-        this.currentValue += value;
-        return this.currentValue;
-    }
+// FILE: test.test.js
 
-    subtract(value) {
-        this.currentValue -= value;
-        return this.currentValue;
-    }
 
-    multiply(value) {
-        this.currentValue *= value;
-        return this.currentValue;
-    }
+describe('Calculator', () => {
+    let calculator;
 
-    divide(value) {
-        if (value === 0) {
-            console.error("Cannot divide by zero.");
-            return this.currentValue;
-        }
-        this.currentValue /= value;
-        return this.currentValue;
-    }
+    beforeEach(() => {
+        calculator = new Calculator();
+    });
 
-    clear() {
-        this.currentValue = 0;
-        return this.currentValue;
-    }
+    test('should initialize with a value of 0', () => {
+        expect(calculator.getCurrentValue()).toBe(0);
+    });
 
-    getCurrentValue() {
-        return this.currentValue;
-    }
-}
+    test('should add positive numbers correctly', () => {
+        expect(calculator.add(10)).toBe(10);
+        expect(calculator.add(5)).toBe(15);
+    });
 
-// Example usage:
-const calculator = new Calculator();
+    test('should add negative numbers correctly', () => {
+        expect(calculator.add(-10)).toBe(-10);
+        expect(calculator.add(-5)).toBe(-15);
+    });
 
-console.log("Initial value:", calculator.getCurrentValue());
-console.log("Add 10:", calculator.add(10));
-console.log("Subtract 5:", calculator.subtract(5));
-console.log("Multiply by 3:", calculator.multiply(3));
-console.log("Divide by 2:", calculator.divide(2));
-console.log("Clear:", calculator.clear());
-console.log("Final value:", calculator.getCurrentValue());
+    test('should add zero correctly', () => {
+        expect(calculator.add(0)).toBe(0);
+    });
+
+    test('should add a mix of positive and negative numbers correctly', () => {
+        calculator.add(10);
+        expect(calculator.add(-5)).toBe(5);
+    });
+});const Calculator = require('./test.js');
+
+// FILE: test.test.js
+
+
+describe('Calculator', () => {
+    let calculator;
+
+    beforeEach(() => {
+        calculator = new Calculator();
+    });
+
+    test('should initialize with a value of 0', () => {
+        expect(calculator.getCurrentValue()).toBe(0);
+    });
+
+    test('should add a value correctly', () => {
+        calculator.add(10);
+        expect(calculator.getCurrentValue()).toBe(10);
+    });
+
+    test('should subtract a value correctly', () => {
+        calculator.add(10);
+        calculator.subtract(5);
+        expect(calculator.getCurrentValue()).toBe(5);
+    });
+
+    test('should multiply a value correctly', () => {
+        calculator.add(10);
+        calculator.multiply(3);
+        expect(calculator.getCurrentValue()).toBe(30);
+    });
+
+    test('should divide a value correctly', () => {
+        calculator.add(10);
+        calculator.divide(2);
+        expect(calculator.getCurrentValue()).toBe(5);
+    });
+
+    test('should not divide by zero', () => {
+        console.error = jest.fn();
+        calculator.add(10);
+        calculator.divide(0);
+        expect(console.error).toHaveBeenCalledWith("Cannot divide by zero.");
+        expect(calculator.getCurrentValue()).toBe(10);
+    });
+
+    test('should clear the value correctly', () => {
+        calculator.add(10);
+        calculator.clear();
+        expect(calculator.getCurrentValue()).toBe(0);
+    });
+});
